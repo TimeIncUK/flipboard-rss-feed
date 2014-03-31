@@ -5,13 +5,15 @@ This plugin adds field to WordPress's built-in RSS feeds, to make it compatible 
 
 ## Frequently Asked Questions ##
 
-* How do you use this plugin?
+#### How do you use this plugin?
 
 After enabling the plugin, navigate to an RSS feed in WordPress. E.g. http:///www.example.com/feed/. Then add ?mrss=1 to the end of the url, it should look something like this, http:///www.example.com/feed/?mrss=1
 
-* Does this plugin include PubSubHubbub support?
+#### Does this plugin include PubSubHubbub support?
 
 In a word, no. There are other plugins available that do this on the WordPress plugin repository.
+
+## Installation
 
 ### Using The WordPress Dashboard 
 
