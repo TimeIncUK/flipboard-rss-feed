@@ -82,6 +82,10 @@ class Flipboard_RSS_Feed {
 
         $this->set_image_size();
 
+        //  no large enough image sizes, lets quit
+        if(count($this->get_image_sizes()) == 0)
+            return;
+
         add_filter('option_rss_use_excerpt', array( $this, 'option_rss_use_excerpt' ) );
         add_filter('option_posts_per_rss',   array( $this, 'option_posts_per_rss' )   );
 
@@ -393,8 +397,8 @@ class Flipboard_RSS_Feed {
             echo "<georss:point>$geo_latitude $geo_longitude</georss:point>";
         }
 
-        // If no featured image / no large enough image sizes, lets quit
-        if(!has_post_thumbnail()  || count($this->get_image_sizes()) == 0)
+        // If no featured image
+        if(!has_post_thumbnail())
             return;
 
             $post_thumbnail_id = get_post_thumbnail_id();
