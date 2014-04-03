@@ -1,13 +1,13 @@
 Flipboard RSS Feed
 ===================
 
-This plugin adds field to WordPress's built-in RSS feeds, to make it compatible with [Flipboard RSS specification](https://flipboard.com/rss/). 
+This plugin adds additional tags to WordPress's built-in RSS feeds to make it compatible with [Flipboard RSS specification](https://flipboard.com/rss/). 
 
 ## Frequently Asked Questions ##
 
 #### How do you use this plugin?
 
-After enabling the plugin, navigate to an RSS feed in WordPress. E.g. http:///www.example.com/feed/. Then add ?mrss=1 to the end of the url, it should look something like this, http:///www.example.com/feed/?mrss=1
+After enabling the plugin, navigate to an RSS feed in WordPress (e.g. http:///www.example.com/feed/) and add ?mrss=1 to the end of the url. It should look something like this: http:///www.example.com/feed/?mrss=1
 
 #### Does this plugin include PubSubHubbub support?
 
