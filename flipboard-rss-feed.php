@@ -2,7 +2,7 @@
 /**
  * Flipboard RSS Feed
  *
- * This plugin adds field to WordPress's built-in RSS feeds, to make it compatible with Flipboard RSS specification
+ * This plugin alters WordPress's built-in RSS feeds to make it compatible with Flipboard RSS specification
  *
  * @package   Flipboard_RSS_Feed
  * @author    Jonathan Harris <jonathan_harris@ipcmedia.com>
