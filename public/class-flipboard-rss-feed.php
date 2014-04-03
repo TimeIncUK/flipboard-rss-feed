@@ -108,7 +108,7 @@ class Flipboard_RSS_Feed {
 	}
 
     /**
-     * Returns weither the this plugin should be enabled.
+     * Returns whether this plugin should be enabled.
      * This function is filterable - flipboard_rss_feed_enabled
      *
      * @since    1.0.0
@@ -348,7 +348,7 @@ class Flipboard_RSS_Feed {
     }
 
     /**
-     * Get parms for utm tracking to url
+     * Get params for utm tracking to url
      *
      * @author   Jonathan Harris
      * @since    1.0.0
