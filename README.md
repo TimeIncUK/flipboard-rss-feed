@@ -1,7 +1,7 @@
 Flipboard RSS Feed
 ===================
 
-This plugin adds additional tags to WordPress's built-in RSS feeds to make it compatible with [Flipboard RSS specification](https://flipboard.com/rss/). 
+This plugin alters WordPress's built-in RSS feeds to make it compatible with [Flipboard RSS specification](https://flipboard.com/rss/). 
 
 ## Frequently Asked Questions ##
 
