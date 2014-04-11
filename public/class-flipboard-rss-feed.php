@@ -74,8 +74,8 @@ class Flipboard_RSS_Feed {
         add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
 
-        if ( !$this->get_is_enabled() )
-            return;
+       // if ( !$this->get_is_enabled() )
+        //    return;
 
         add_filter('option_rss_use_excerpt', array( $this, 'option_rss_use_excerpt' ), 15, 1 );
         add_filter('option_posts_per_rss',   array( $this, 'option_posts_per_rss' ), 15, 1  );
@@ -404,18 +404,15 @@ class Flipboard_RSS_Feed {
             echo "<georss:point>$geo_latitude $geo_longitude</georss:point>";
         }
 
-        // If no featured image
-        if(!has_post_thumbnail())
-            return;
+        $post_thumbnail_id = apply_filters('flipboard_post_thumbnail_id', get_post_thumbnail_id());
 
-        $post_thumbnail_id = get_post_thumbnail_id();
         $post_thumbnail_alt = trim(strip_tags( get_post_meta($post_thumbnail_id, '_wp_attachment_image_alt', true) ));
         $format = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
         $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
-        ?>
-        <media:group>
-            <media:thumbnail url="<?php echo $image_attributes[0];?>" width="<?php echo $image_attributes[1];?>" height="<?php echo $image_attributes[2];?>"  />
-            <?php
+
+        $media = "";
+        if(!empty($post_thumbnail_id)){
+            $media = '<media:thumbnail url="'.$image_attributes[0].'" width="'.$image_attributes[1].'" height="'.$image_attributes[2].'"  />';
 
             $existing_images = array();
             foreach($this->get_image_sizes() as $size){
@@ -423,11 +420,19 @@ class Flipboard_RSS_Feed {
 
                 // Don't show the same image more than once
                 if(!in_array($image_attributes[0], $existing_images)){
-                    printf($format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1],$image_attributes[2],$image_attributes[0],$post_thumbnail_alt);
+                    $media .=  sprintf($format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1],$image_attributes[2],$image_attributes[0],$post_thumbnail_alt);
                 }
                 $existing_images[] = $image_attributes[0];
             }
-            ?>
+        }
+        $media = apply_filters('flipboard_media_element', $media);
+
+        // If no media is set
+        if(empty($media))
+            return;
+        ?>
+        <media:group>
+            <?php echo $media; ?>
         </media:group>
     <?php
     }
