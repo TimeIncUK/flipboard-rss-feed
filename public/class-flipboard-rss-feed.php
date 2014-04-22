@@ -376,6 +376,16 @@ class Flipboard_RSS_Feed {
         return add_query_arg( $this->get_url_params(), $url );
     }
 
+
+    protected function flipboard_figure($attachment_id){
+        $attachment_data = wp_prepare_attachment_for_js($attachment_id);
+        if($attachment_data['description'])  $fig_caption = $attachment_data['description'];
+        else if($attachment_data['caption']) $fig_caption = $attachment_data['caption'];
+        else if($attachment_data['alt'])     $fig_caption = $attachment_data['alt'];
+        else $fig_caption = '';
+        return $fig_caption;
+    }
+
     /**
      * Add extra fields to header of RSS to make RSS feed valid
      *
@@ -406,7 +416,7 @@ class Flipboard_RSS_Feed {
 
         $post_thumbnail_id = apply_filters('flipboard_post_thumbnail_id', get_post_thumbnail_id());
 
-        $post_thumbnail_alt = trim(strip_tags( get_post_meta($post_thumbnail_id, '_wp_attachment_image_alt', true) ));
+        $post_thumbnail_alt = trim(strip_tags( $this->flipboard_figure($post_thumbnail_id) ));
         $format = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
         $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
 
