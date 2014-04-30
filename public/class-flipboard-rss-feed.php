@@ -24,7 +24,7 @@ class Flipboard_RSS_Feed {
      *
      * @var     string
      */
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.4';
 
     /*
      *
@@ -422,7 +422,7 @@ class Flipboard_RSS_Feed {
 
         $media = "";
         if(!empty($post_thumbnail_id)){
-            $media = '<media:thumbnail url="'.$image_attributes[0].'" width="'.$image_attributes[1].'" height="'.$image_attributes[2].'"  />';
+            $media = '';
 
             $existing_images = array();
             foreach($this->get_image_sizes() as $size){
