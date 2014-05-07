@@ -421,6 +421,8 @@ class Flipboard_RSS_Feed {
         $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
 
         $media = "";
+        $counter = 0;
+        
         if(!empty($post_thumbnail_id)){
             $media = '';
 
@@ -431,20 +433,31 @@ class Flipboard_RSS_Feed {
                 // Don't show the same image more than once
                 if(!in_array($image_attributes[0], $existing_images)){
                     $media .=  sprintf($format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1],$image_attributes[2],$image_attributes[0],$post_thumbnail_alt);
+                    $counter++;
                 }
                 $existing_images[] = $image_attributes[0];
             }
         }
-        $media = apply_filters('flipboard_media_element', $media);
+        $media_display = apply_filters('flipboard_media_element', $media);
 
-        // If no media is set
-        if(empty($media))
-            return;
-        ?>
-        <media:group>
-            <?php echo $media; ?>
-        </media:group>
-    <?php
+        if($media_display !== $media){
+        	$counter++;
+        }
+        
+        switch ($counter){
+		case 0:
+			$output = '';
+			break;
+		case 1:      		
+			$output = $media_display;
+			break;
+		default: 
+			$output = "<media:group>".$media_display."</media:group>";
+			break;
+        }
+        
+        echo $output;
+        
     }
 
 }
