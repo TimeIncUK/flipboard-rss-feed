@@ -1,6 +1,6 @@
 === Flipboard RSS Feed ===
 Contributors: spacedmonkey
-Donate link: http://www.ipcmedia.com/
+Donate link: http://www.timeincuk.com/
 Tags: rss, feed,flipboard
 Requires at least: 3.5.1
 Tested up to: 3.8.1
@@ -16,7 +16,7 @@ This plugin alters WordPress's built-in RSS feeds to make it compatible with [Fl
 
 = Credits =
 
-This plugin was written by the development team at [IPC Media](http://www.ipcmedia.com/) and maintained by [@spacedmonkey](http://profiles.wordpress.org/spacedmonkey).
+This plugin was written by the development team at [Time Inc. (UK) Ltd](http://www.timeincuk.com/) and maintained by [@spacedmonkey](http://profiles.wordpress.org/spacedmonkey).
 
 == Installation ==
 

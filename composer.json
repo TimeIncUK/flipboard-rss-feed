@@ -1,13 +1,13 @@
 {
     "name"       : "ipcmedia/flipboard-rss-feed",
     "description": "Flipboard RSS Feed",
-    "homepage"   : "https://github.com/ipcmedia/flipboard-rss-feed",
+    "homepage"   : "https://github.com/TimeIncUK/flipboard-rss-feed",
     "type"       : "wordpress-plugin",
     "license"    : "GPL-2.0+",
     "authors"    : [
         {
-            "name"    : "IPC Media",
-            "homepage": "http://www.ipcmedia.com/"
+            "name"    : "Time Inc. (UK) Ltd",
+            "homepage": "http://www.timeincuk.com/"
         }
     ],
     "require": {
