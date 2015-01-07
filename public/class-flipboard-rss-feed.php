@@ -409,69 +409,68 @@ class Flipboard_RSS_Feed {
 	public function mrss_ns() {
 		echo 'xmlns:media="http://search.yahoo.com/mrss/"
         xmlns:georss="http://www.georss.org/georss"';
-	}
+    }
 
-	/**
-	 * Add mrss and georss fields to rss item
-	 *
-	 * @author   Jonathan Harris
-	 * @since    1.0.0
-	 */
-	public function mrss_item() {
+    /**
+     * Add mrss and georss fields to rss item
+     *
+     * @author   Jonathan Harris
+     * @since    1.0.0
+     */
+    public function mrss_item(){
 
-		// GEO values are be set by core
-		$geo_latitude  = get_post_meta( get_the_ID(), 'geo_latitude', true );
-		$geo_longitude = get_post_meta( get_the_ID(), 'geo_longitude', true );
+        // GEO values are be set by core
+        $geo_latitude  = get_post_meta(get_the_ID(),'geo_latitude',true);
+        $geo_longitude = get_post_meta(get_the_ID(),'geo_longitude',true);
 
-		// If geo latitude / geo_longitude are set, show georss
-		if ( $geo_latitude && $geo_longitude ) {
-			echo "<georss:point>$geo_latitude $geo_longitude</georss:point>";
-		}
+        // If geo latitude / geo_longitude are set, show georss
+        if($geo_latitude && $geo_longitude) {
+            echo "<georss:point>$geo_latitude $geo_longitude</georss:point>";
+        }
 
-		$post_thumbnail_id = apply_filters( 'flipboard_post_thumbnail_id', get_post_thumbnail_id() );
+        $post_thumbnail_id = apply_filters('flipboard_post_thumbnail_id', get_post_thumbnail_id());
 
-		$post_thumbnail_alt = trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) );
-		$format             = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
-		$image_attributes   = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
+        $post_thumbnail_alt = htmlspecialchars( trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) ) );
+        $format = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
+        $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
 
-		$media   = "";
-		$counter = 0;
+        $media = "";
+        $counter = 0;
+        
+        if(!empty($post_thumbnail_id)){
+            $media = '';
 
-		if ( ! empty( $post_thumbnail_id ) ) {
-			$media = '';
+            $existing_images = array();
+            foreach($this->get_image_sizes() as $size){
+                $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 
-			$existing_images = array();
-			foreach ( $this->get_image_sizes() as $size ) {
-				$image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, $size );
+                // Don't show the same image more than once
+                if(!in_array($image_attributes[0], $existing_images)){
+                    $media .=  sprintf($format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1],$image_attributes[2],$image_attributes[0],$post_thumbnail_alt);
+                    $counter++;
+                }
+                $existing_images[] = $image_attributes[0];
+            }
+        }
+        $media_display = apply_filters('flipboard_media_element', $media);
 
-				// Don't show the same image more than once
-				if ( ! in_array( $image_attributes[0], $existing_images ) ) {
-					$media .= sprintf( $format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt );
-					$counter ++;
-				}
-				$existing_images[] = $image_attributes[0];
-			}
-		}
-		$media_display = apply_filters( 'flipboard_media_element', $media );
-
-		if ( $media_display !== $media ) {
-			$counter ++;
-		}
-
-		switch ( $counter ) {
-			case 0:
-				$output = '';
-				break;
-			case 1:
-				$output = $media_display;
-				break;
-			default:
-				$output = "<media:group>" . $media_display . "</media:group>";
-				break;
-		}
-
-		echo $output;
-
-	}
-
+        if($media_display !== $media){
+        	$counter++;
+        }
+        
+        switch ($counter){
+		case 0:
+			$output = '';
+			break;
+		case 1:      		
+			$output = $media_display;
+			break;
+		default: 
+			$output = "<media:group>".$media_display."</media:group>";
+			break;
+        }
+        
+        echo $output;
+        
+    }
 }
