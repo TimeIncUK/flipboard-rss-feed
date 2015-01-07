@@ -416,7 +416,7 @@ class Flipboard_RSS_Feed {
 
         $post_thumbnail_id = apply_filters('flipboard_post_thumbnail_id', get_post_thumbnail_id());
 
-        $post_thumbnail_alt = trim(strip_tags( $this->flipboard_figure($post_thumbnail_id) ));
+        $post_thumbnail_alt = htmlspecialchars( trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) ) );
         $format = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
         $image_attributes = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
 
