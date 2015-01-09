@@ -479,7 +479,6 @@ class Flipboard_RSS_Feed {
                 'class'   => '',
         ), $attr, 'caption' );
 
-        var_dump($atts);
         $atts['width'] = (int) $atts['width'];
         if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
                 return $content;
