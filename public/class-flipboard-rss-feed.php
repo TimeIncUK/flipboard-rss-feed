@@ -74,7 +74,7 @@ class Flipboard_RSS_Feed {
         add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
 
-       // if ( !$this->get_is_enabled() )
+        // if ( !$this->get_is_enabled() )
         //    return;
 
         add_filter('option_rss_use_excerpt', array( $this, 'option_rss_use_excerpt' ), 15, 1 );
@@ -82,6 +82,10 @@ class Flipboard_RSS_Feed {
 
         add_action('template_redirect', array($this, 'template_redirect'));
 
+        //Add an additional filter to handle images in the post content
+        if( $this->get_is_enabled() ){
+            add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
+        }
     }
 
     /**
@@ -460,4 +464,33 @@ class Flipboard_RSS_Feed {
         
     }
 
+    /**
+     * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
+     *
+     * @author   Simon McWhinnie
+     * @since    1.1.0
+     */
+    function flipboard_caption( $output, $attr, $content ) {
+        $atts = shortcode_atts( array(
+                 'id'      => '',
+                'align'   => 'alignnone',
+                'width'   => '',
+                'caption' => '',
+                'class'   => '',
+        ), $attr, 'caption' );
+
+        var_dump($atts);
+        $atts['width'] = (int) $atts['width'];
+        if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
+                return $content;
+
+        if ( ! empty( $atts['id'] ) )
+                $atts['id'] = 'id="' . esc_attr( $atts['id'] ) . '" ';
+
+        $class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
+
+        return '<figure ' . $atts['id'] . 'style="width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
+         . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
+
+    }    
 }
