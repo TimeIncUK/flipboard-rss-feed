@@ -511,7 +511,10 @@ class Flipboard_RSS_Feed {
     */
     function cleanup_feed_of_tags($string){
         // Return if string not given or empty
-        if (!is_string($string) || trim($string) == '') return $string;
+        if ( !is_string( $string ) || trim( $string ) == ''){
+            return $string;    
+        }
+         
         // Recursive empty HTML tags
         $string = preg_replace(
             '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/', 
