@@ -84,7 +84,7 @@ class Flipboard_RSS_Feed {
 
         if( $this->get_is_enabled() ){
             add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
-            add_filter( 'the_content_feed', array( $this, 'cleanup_feed_of_tags'), 10 , 2 );
+            add_filter( 'the_content_feed', array( $this, 'cleanup_feed_of_tags'), 10);
         }
     }
 
@@ -468,7 +468,7 @@ class Flipboard_RSS_Feed {
      * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
      *
      * @author   Simon McWhinnie
-     * @since    1.1.0
+     * @since    1.0.5
      */
     function flipboard_caption( $output, $attr, $content ) {
         $atts = shortcode_atts( array(
@@ -493,18 +493,28 @@ class Flipboard_RSS_Feed {
 
     } 
 
-    function cleanup_feed_of_tags($string, $replace_to = null){
+    /**
+    * Clean up feed, removing empty html tags and script/style tags
+    *
+    * @author Simon McWhinnie
+    * @since  1.0.5
+    */
+    function cleanup_feed_of_tags($string){
         // Return if string not given or empty
         if (!is_string($string) || trim($string) == '') return $string;
         // Recursive empty HTML tags
         $string = preg_replace(
-            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/',
-            !is_string($replaceTo) ? '' : $replaceTo,
+            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/', 
+            '',
             $string
         );
-        
+
         //remove all <script> and <style> tags
-        $string = preg_replace('/<(style|script)[^>]*?.<\/(script|style)>/', '' , $string);
+        $string = preg_replace(
+            '/<(style|script)[^>]*?.<\/(script|style)>/', 
+            '' , 
+            $string
+        );
 
         return $string;
     }   
