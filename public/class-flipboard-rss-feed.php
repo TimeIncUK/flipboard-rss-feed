@@ -82,9 +82,9 @@ class Flipboard_RSS_Feed {
 
         add_action('template_redirect', array($this, 'template_redirect'));
 
-        //Add an additional filter to handle images in the post content
         if( $this->get_is_enabled() ){
             add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
+            add_filter( 'the_content_feed', array( $this, 'cleanup_feed_of_tags'), 10 , 2 );
         }
     }
 
@@ -472,7 +472,7 @@ class Flipboard_RSS_Feed {
      */
     function flipboard_caption( $output, $attr, $content ) {
         $atts = shortcode_atts( array(
-                 'id'      => '',
+                'id'      => '',
                 'align'   => 'alignnone',
                 'width'   => '',
                 'caption' => '',
@@ -491,5 +491,21 @@ class Flipboard_RSS_Feed {
         return '<figure ' . $atts['id'] . 'style="width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
          . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
 
-    }    
+    } 
+
+    function cleanup_feed_of_tags($string, $replace_to = null){
+        // Return if string not given or empty
+        if (!is_string($string) || trim($string) == '') return $string;
+        // Recursive empty HTML tags
+        $string = preg_replace(
+            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/',
+            !is_string($replaceTo) ? '' : $replaceTo,
+            $string
+        );
+        
+        //remove all <script> and <style> tags
+        $string = preg_replace('/<(style|script)[^>]*?.<\/(script|style)>/', '' , $string);
+
+        return $string;
+    }   
 }
