@@ -17,7 +17,6 @@
  */
 class Flipboard_RSS_Feed {
 
-<<<<<<< HEAD
 	/**
 	 * Plugin version, used for cache-busting of style and script file references.
 	 *
@@ -246,202 +245,6 @@ class Flipboard_RSS_Feed {
 		if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
 			return;
 		}
-=======
-    /**
-     * Plugin version, used for cache-busting of style and script file references.
-     *
-     * @since   1.0.0
-     *
-     * @var     string
-     */
-    const VERSION = '1.0.4';
-
-    /*
-     *
-     * Unique identifier for your plugin.
-     *
-     *
-     * The variable name is used as the text domain when internationalizing strings
-     * of text. Its value should match the Text Domain file header in the main
-     * plugin file.
-     *
-     * @since    1.0.0
-     *
-     * @var      string
-     */
-    protected $plugin_slug = 'flipboard-rss-feed';
-
-    /**
-     * Instance of this class.
-     *
-     * @since    1.0.0
-     *
-     * @var      object
-     */
-    protected static $instance = null;
-
-
-    /**
-     * Array of sizes
-     *
-     * @since    1.0.0
-     *
-     * @var      array
-     */
-    protected $image_sizes = array();
-
-    /**
-     * Initialize the plugin by setting localization and loading public scripts
-     * and styles.
-     *
-     * @since     1.0.0
-     */
-    private function __construct() {
-        // Load plugin text domain
-        add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
-
-        // Activate plugin when new blog is added
-        add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
-
-
-        // if ( !$this->get_is_enabled() )
-        //    return;
-
-        add_filter('option_rss_use_excerpt', array( $this, 'option_rss_use_excerpt' ), 15, 1 );
-        add_filter('option_posts_per_rss',   array( $this, 'option_posts_per_rss' ), 15, 1  );
-
-        add_action('template_redirect', array($this, 'template_redirect'));
-
-        //Add an additional filter to handle images in the post content
-        if( $this->get_is_enabled() ){
-            add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
-        }
-    }
-
-    /**
-     * Return the plugin slug.
-     *
-     * @since    1.0.0
-     *
-     * @return    Plugin slug variable.
-     */
-    public function get_plugin_slug() {
-        return $this->plugin_slug;
-    }
-
-    /**
-     * Load these filters after pre post has run.
-     */
-    public function template_redirect(){
-
-        $this->set_image_size();
-        //  no large enough image sizes, lets quit
-        if(count($this->get_image_sizes()) == 0)
-            return;
-
-        if(!is_feed()){
-            return;
-        }
-
-        add_action('rss2_ns',   array( $this, 'mrss_ns' ));
-        add_action('rss2_item', array( $this, 'mrss_item'), 10, 0);
-        add_filter('the_permalink_rss',      array( $this, 'the_permalink_rss' )      );
-    }
-
-    /**
-     * Returns whether this plugin should be enabled.
-     * This function is filterable - flipboard_rss_feed_enabled
-     *
-     * @since    1.0.0
-     *
-     * @return boolean true | false
-     */
-    public function get_is_enabled(){
-        return apply_filters('flipboard_rss_feed_enabled', ((isset( $_GET['mrss'] ) && $_GET['mrss'] == '1' )));
-    }
-
-    /**
-     * Return the images sizes array.
-     *
-     * @since    1.0.0
-     *
-     * @return    image sizes variable.
-     */
-
-    public function get_image_sizes(){
-        return apply_filters('flipboard_rss_feed_image_sizes', $this->image_sizes );
-    }
-
-    /**
-     * Return an instance of this class.
-     *
-     * @since     1.0.0
-     *
-     * @return    object    A single instance of this class.
-     */
-    public static function get_instance() {
-
-        // If the single instance hasn't been set, set it now.
-        if ( null == self::$instance ) {
-            self::$instance = new self;
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * Fired when the plugin is activated.
-     *
-     * @since    1.0.0
-     *
-     * @param    boolean    $network_wide    True if WPMU superadmin uses
-     *                                       "Network Activate" action, false if
-     *                                       WPMU is disabled or plugin is
-     *                                       activated on an individual blog.
-     */
-    public static function activate( $network_wide ) {
-
-        if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
-            if ( $network_wide  ) {
-
-                // Get all blog ids
-                $blog_ids = self::get_blog_ids();
-
-                foreach ( $blog_ids as $blog_id ) {
-
-                    switch_to_blog( $blog_id );
-                    self::single_activate();
-                }
-
-                restore_current_blog();
-
-            } else {
-                self::single_activate();
-            }
-
-        } else {
-            self::single_activate();
-        }
-
-    }
-
-    /**
-     * Fired when the plugin is deactivated.
-     *
-     * @since    1.0.0
-     *
-     * @param    boolean    $network_wide    True if WPMU superadmin uses
-     *                                       "Network Deactivate" action, false if
-     *                                       WPMU is disabled or plugin is
-     *                                       deactivated on an individual blog.
-     */
-    public static function deactivate( $network_wide ) {
-
-        if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
-            if ( $network_wide ) {
->>>>>>> Convert caption shortcode to HTML5 markup for flipboard
 
 		switch_to_blog( $blog_id );
 		self::single_activate();
@@ -670,8 +473,6 @@ class Flipboard_RSS_Feed {
         echo $output;
         
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
@@ -681,7 +482,7 @@ class Flipboard_RSS_Feed {
      */
     function flipboard_caption( $output, $attr, $content ) {
         $atts = shortcode_atts( array(
-                 'id'      => '',
+                'id'      => '',
                 'align'   => 'alignnone',
                 'width'   => '',
                 'caption' => '',
@@ -700,6 +501,21 @@ class Flipboard_RSS_Feed {
         return '<figure ' . $atts['id'] . 'style="width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
          . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
 
-    }    
->>>>>>> Convert caption shortcode to HTML5 markup for flipboard
+    }
+
+    function cleanup_feed_of_tags($string, $replace_to = null){
+        // Return if string not given or empty
+        if (!is_string($string) || trim($string) == '') return $string;
+        // Recursive empty HTML tags
+        $string = preg_replace(
+            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/',
+            !is_string($replaceTo) ? '' : $replaceTo,
+            $string
+        );
+        
+        //remove all <script> and <style> tags
+        $string = preg_replace('/<(style|script)[^>]*?.<\/(script|style)>/', '' , $string);
+
+        return $string;
+    }   
 }
