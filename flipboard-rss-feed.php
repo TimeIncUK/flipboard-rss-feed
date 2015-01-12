@@ -14,7 +14,7 @@
  * Plugin Name:       Flipboard RSS Feed
  * Plugin URI:        http://www.ipcmedia.com/
  * Description:       Generate a flipboard RSS Feed
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            Jonathan Harris
  * Author URI:        http://www.jonathandavidharris.co.uk/
  * Text Domain:       flipboard-rss-feed
