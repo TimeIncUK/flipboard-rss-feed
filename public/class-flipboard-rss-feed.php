@@ -24,7 +24,7 @@ class Flipboard_RSS_Feed {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '1.0.6';
+	const VERSION = '1.0.7';
 
 	/*
 	 *
@@ -478,7 +478,7 @@ class Flipboard_RSS_Feed {
      * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
      *
      * @author   Simon McWhinnie
-     * @since    1.0.5
+     * @since    1.0.7
      */
     function flipboard_caption( $output, $attr, $content ) {
         $atts = shortcode_atts( array(
@@ -507,7 +507,7 @@ class Flipboard_RSS_Feed {
     * Clean up feed, removing empty html tags and script/style tags
     *
     * @author Simon McWhinnie
-    * @since  1.0.5
+    * @since  1.0.7
     */
     function cleanup_feed_of_tags($string){
         // Return if string not given or empty
