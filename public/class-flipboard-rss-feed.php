@@ -245,7 +245,6 @@ class Flipboard_RSS_Feed {
 		if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
 			return;
 		}
-
 		switch_to_blog( $blog_id );
 		self::single_activate();
 		restore_current_blog();
@@ -500,7 +499,6 @@ class Flipboard_RSS_Feed {
 
         return '<figure ' . $atts['id'] . 'style="width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
          . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
-
     }
 
     /**
