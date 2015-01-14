@@ -83,6 +83,11 @@ class Flipboard_RSS_Feed {
 
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 
+		//Add an additional filter to handle images in the post content
+        if( $this->get_is_enabled() ){
+            add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
+        }
+
 	}
 
 	/**
