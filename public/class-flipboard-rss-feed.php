@@ -86,6 +86,8 @@ class Flipboard_RSS_Feed {
 		//Add an additional filter to handle images in the post content
 		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
 		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
+		//we run this after auto embeds so we can remove scripts like twitter
+		add_filter( 'the_content', array( $this, 'remove_script_style_tags'), 11);
 
 	}
 
@@ -525,6 +527,21 @@ class Flipboard_RSS_Feed {
             '',
             $string
         );
+
+        return $string;
+    }
+
+    /**
+    * Remove script and style tags
+    *
+    * @author Simon McWhinnie
+    * @since  1.0.7
+    */
+    function remove_script_style_tags( $string ){
+    	// Return if string not given or empty
+        if ( !is_string( $string ) || trim( $string ) == ''){
+            return $string;    
+        }
 
         //remove all <script> and <style> tags
         $string = preg_replace(
