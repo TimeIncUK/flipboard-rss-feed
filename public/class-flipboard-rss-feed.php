@@ -84,7 +84,8 @@ class Flipboard_RSS_Feed {
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 
 		//Add an additional filter to handle images in the post content
-		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption'), 10, 3 );
+		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
+		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
 
 	}
 
