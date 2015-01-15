@@ -24,7 +24,7 @@ class Flipboard_RSS_Feed {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '1.0.6';
+	const VERSION = '1.0.7';
 
 	/*
 	 *
@@ -82,6 +82,12 @@ class Flipboard_RSS_Feed {
 		add_filter( 'option_posts_per_rss', array( $this, 'option_posts_per_rss' ), 15, 1 );
 
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
+
+		//Add an additional filter to handle images in the post content
+		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
+		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
+		//we run this after auto embeds so we can remove scripts like twitter
+		add_filter( 'the_content', array( $this, 'remove_script_style_tags'), 11);
 
 	}
 
@@ -430,7 +436,7 @@ class Flipboard_RSS_Feed {
 
 		$post_thumbnail_id = apply_filters( 'flipboard_post_thumbnail_id', get_post_thumbnail_id() );
 
-		$post_thumbnail_alt = trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) );
+		$post_thumbnail_alt = htmlspecialchars( trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) ) );
 		$format             = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
 		$image_attributes   = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
 
@@ -473,5 +479,78 @@ class Flipboard_RSS_Feed {
 		echo $output;
 
 	}
+
+	/**
+     * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
+     *
+     * @author   Simon McWhinnie
+     * @since    1.0.7
+     */
+    function flipboard_caption( $output, $attr, $content ) {
+        $atts = shortcode_atts( array(
+                'id'      => '',
+                'align'   => 'alignnone',
+                'width'   => '',
+                'caption' => '',
+                'class'   => '',
+        ), $attr, 'caption' );
+
+        $atts['width'] = (int) $atts['width'];
+        if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
+                return $content;
+
+        if ( ! empty( $atts['id'] ) )
+                $atts['id'] = 'id="' . esc_attr( $atts['id'] ) . '" ';
+
+        $class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
+
+        return '<figure ' . $atts['id'] . 'style="width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
+         . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
+
+    }
+
+    /**
+    * Clean up feed, removing empty html tags and script/style tags
+    *
+    * @author Simon McWhinnie
+    * @since  1.0.7
+    */
+    function cleanup_feed_of_tags($string){
+        // Return if string not given or empty
+        if ( !is_string( $string ) || trim( $string ) == ''){
+            return $string;    
+        }
+         
+        // Recursive empty HTML tags
+        $string = preg_replace(
+            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/', 
+            '',
+            $string
+        );
+
+        return $string;
+    }
+
+    /**
+    * Remove script and style tags
+    *
+    * @author Simon McWhinnie
+    * @since  1.0.7
+    */
+    function remove_script_style_tags( $string ){
+    	// Return if string not given or empty
+        if ( !is_string( $string ) || trim( $string ) == ''){
+            return $string;    
+        }
+
+        //remove all <script> and <style> tags
+        $string = preg_replace(
+            '/<(style|script).*>.*<\/(style|script)>/', 
+            '' , 
+            $string
+        );
+
+        return $string;
+    }
 
 }
