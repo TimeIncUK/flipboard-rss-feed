@@ -545,7 +545,7 @@ class Flipboard_RSS_Feed {
 
         //remove all <script> and <style> tags
         $string = preg_replace(
-            '/<(style|script)[^>]>*?.<\/(script|style)>/', 
+            '/<(style|script).*>.*<\/(style|script)>/', 
             '' , 
             $string
         );
