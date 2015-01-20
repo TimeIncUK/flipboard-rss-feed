@@ -115,7 +115,7 @@ class Flipboard_RSS_Feed {
 		add_action( 'rss2_item', array( $this, 'mrss_item' ), 10, 0 );
 
 		add_filter( 'the_permalink_rss', array( $this, 'the_permalink_rss' ) );
-		
+
 		//Add an additional filter to handle images in the post content
 		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
 		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
