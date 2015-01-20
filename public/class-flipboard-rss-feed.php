@@ -83,12 +83,6 @@ class Flipboard_RSS_Feed {
 
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 
-		//Add an additional filter to handle images in the post content
-		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
-		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
-		//we run this after auto embeds so we can remove scripts like twitter
-		add_filter( 'the_content', array( $this, 'remove_script_style_tags'), 11);
-
 	}
 
 	/**
@@ -117,10 +111,16 @@ class Flipboard_RSS_Feed {
 			return;
 		}
 
-
 		add_action( 'rss2_ns', array( $this, 'mrss_ns' ) );
 		add_action( 'rss2_item', array( $this, 'mrss_item' ), 10, 0 );
+
 		add_filter( 'the_permalink_rss', array( $this, 'the_permalink_rss' ) );
+
+		//Add an additional filter to handle images in the post content
+		add_filter( 'img_caption_shortcode', array( $this, 'flipboard_caption' ), 10, 3 );
+		add_filter( 'the_content', array( $this, 'cleanup_feed_of_tags' ), 5 );
+		//we run this after auto embeds so we can remove scripts like twitter
+		add_filter( 'the_content', array( $this, 'remove_script_style_tags' ), 11 );
 	}
 
 	/**
