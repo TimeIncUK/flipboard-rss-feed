@@ -438,7 +438,8 @@ class Flipboard_RSS_Feed {
 
 		$post_thumbnail_alt = htmlspecialchars( trim( strip_tags( $this->flipboard_figure( $post_thumbnail_id ) ) ) );
 		$format             = '<media:content type="%1$s" medium="image" width="%2$s" height="%3$s"  url="%4$s"><media:description type="plain">%5$s</media:description></media:content>';
-		$image_attributes   = wp_get_attachment_image_src( $post_thumbnail_id, 'thumbnail' );
+		$format_enclosure   = '<enclosure url="%1$s" type="%2$s" length="0" />';
+		$image_enclosure    = '';
 
 		$media   = "";
 		$counter = 0;
@@ -452,8 +453,14 @@ class Flipboard_RSS_Feed {
 
 				// Don't show the same image more than once
 				if ( ! in_array( $image_attributes[0], $existing_images ) ) {
-					$media .= sprintf( $format, get_post_mime_type( $post_thumbnail_id ), $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt );
+
+					$mimeType = get_post_mime_type( $post_thumbnail_id );
+					$media .= sprintf( $format, $mimeType, $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt );
 					$counter ++;
+					if ( $size == 'large' ) {
+						$image_enclosure = sprintf( $format_enclosure, $mimeType, $image_attributes[0] );
+					}
+
 				}
 				$existing_images[] = $image_attributes[0];
 			}
@@ -475,6 +482,7 @@ class Flipboard_RSS_Feed {
 				$output = "<media:group>" . $media_display . "</media:group>";
 				break;
 		}
+		$output .= $image_enclosure;
 
 		echo $output;
 
