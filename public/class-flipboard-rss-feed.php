@@ -444,7 +444,7 @@ class Flipboard_RSS_Feed {
 		$media   = "";
 		$counter = 0;
 
-		if ( ! empty( $post_thumbnail_id ) ) {
+		if ( ! empty( $post_thumbnail_id ) && wp_attachment_is_image( $post_thumbnail_id ) ) {
 			$media = '';
 
 			$existing_images = array();
