@@ -458,7 +458,7 @@ class Flipboard_RSS_Feed {
 					$media .= sprintf( $format, $mimeType, $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt );
 					$counter ++;
 					if ( $size == 'large' ) {
-						$image_enclosure = sprintf( $format_enclosure, $mimeType, $image_attributes[0] );
+						$image_enclosure = sprintf( $format_enclosure, $image_attributes[0], $mimeType );
 					}
 
 				}
