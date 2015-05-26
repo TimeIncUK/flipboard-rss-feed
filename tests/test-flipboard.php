@@ -51,7 +51,7 @@ class FlipboardTest extends WP_UnitTestCase {
 		$content = 'testing<a href="#">Testing</a><strong>boom</strong>';
 		$content_after = 'testing';
 
-		$this->assertEquals($content_after, $this->class_instance->cleanup_feed_of_tags($content));
+		$this->assertEquals($content, $this->class_instance->cleanup_feed_of_tags($content));
 		$this->assertEquals($content_after, $this->class_instance->cleanup_feed_of_tags($content_after));
 	}
 
@@ -64,5 +64,13 @@ class FlipboardTest extends WP_UnitTestCase {
 		$this->assertEquals($content_after, $this->class_instance->remove_script_style_tags($content_after));
 	}
 
+
+	function test_flipboard_filter_mixed_styles_out(){
+
+		$content = 'testing<a href="#">Testing</a><strong>boom</strong><style>#css{}</style><script>alert("testing");</script>';
+		$content_after = 'testing<a href="#">Testing</a><strong>boom</strong>';
+
+		$this->assertEquals($content_after, $this->class_instance->remove_script_style_tags($content));
+	}
 }
 
