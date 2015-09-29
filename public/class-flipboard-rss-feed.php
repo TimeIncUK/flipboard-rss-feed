@@ -390,20 +390,29 @@ class Flipboard_RSS_Feed {
 		return add_query_arg( $this->get_url_params(), $url );
 	}
 
+	/**
+	 * Gets the image caption
+	 *
+	 * @author   Jonathan Harris
+	 * @since    1.0.0
+	 */
+	public function flipboard_figure( $attachment_id ) {
 
-	protected function flipboard_figure( $attachment_id ) {
-		$attachment_data = wp_prepare_attachment_for_js( $attachment_id );
-		if ( $attachment_data['description'] ) {
-			$fig_caption = $attachment_data['description'];
-		} else if ( $attachment_data['caption'] ) {
-			$fig_caption = $attachment_data['caption'];
-		} else if ( $attachment_data['alt'] ) {
-			$fig_caption = $attachment_data['alt'];
-		} else {
-			$fig_caption = '';
-		}
+		if( empty( $attachment_id ) || ! wp_attachment_is_image( $attachment_id ) ) {
+             return '';
+        }
 
-		return $fig_caption;
+        $attachment  = get_post( $attachment_id );
+        $description = get_post_field( 'post_content', $attachment );
+        $caption     = get_post_field( 'post_excerpt', $attachment );
+        $alt         = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+
+        if( $description )  $fig_caption = $description;
+        else if( $caption ) $fig_caption = $caption;
+        else if( $alt )     $fig_caption = $alt;
+        else $fig_caption = '';
+
+       return $fig_caption;
 	}
 
 	/**
@@ -489,7 +498,7 @@ class Flipboard_RSS_Feed {
 	}
 
 	/**
-     * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.  
+     * Use WPs code to convert captions into HTML 5 markup in case the theme doesn't support it already.
      *
      * @author   Simon McWhinnie
      * @since    1.0.7
@@ -526,12 +535,12 @@ class Flipboard_RSS_Feed {
     function cleanup_feed_of_tags($string){
         // Return if string not given or empty
         if ( !is_string( $string ) || trim( $string ) == ''){
-            return $string;    
+            return $string;
         }
-         
+
         // Recursive empty HTML tags
         $string = preg_replace(
-            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/', 
+            '/<(\w+)\b(?:\s+[\w\-.:]+(?:\s*=\s*(?:"[^"]*"|"[^"]*"|[\w\-.:]+))?)*\s*\/?>\s*<\/\1\s*>/',
             '',
             $string
         );
@@ -548,13 +557,13 @@ class Flipboard_RSS_Feed {
     function remove_script_style_tags( $string ){
     	// Return if string not given or empty
         if ( !is_string( $string ) || trim( $string ) == ''){
-            return $string;    
+            return $string;
         }
 
         //remove all <script> and <style> tags
         $string = preg_replace(
-            '/<(style|script).*>.*<\/(style|script)>/', 
-            '' , 
+            '/<(style|script).*>.*<\/(style|script)>/',
+            '' ,
             $string
         );
 
