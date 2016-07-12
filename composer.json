@@ -1,7 +1,7 @@
 {
-    "name"       : "ipcmedia/flipboard-rss-feed",
+    "name"       : "timeincoss/flipboard-rss-feed",
     "description": "Flipboard RSS Feed",
-    "homepage"   : "https://github.com/TimeIncUK/flipboard-rss-feed",
+    "homepage"   : "https://github.com/timeincoss/flipboard-rss-feed",
     "type"       : "wordpress-plugin",
     "license"    : "GPL-2.0+",
     "authors"    : [
