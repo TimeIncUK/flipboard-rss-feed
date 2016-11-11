@@ -464,7 +464,7 @@ class Flipboard_RSS_Feed {
 				if ( ! in_array( $image_attributes[0], $existing_images ) ) {
 
 					$mimeType = get_post_mime_type( $post_thumbnail_id );
-					$media .= sprintf( $format, $mimeType, $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt );
+					$media .= apply_filters( 'flipboard_media_single_item', sprintf( $format, $mimeType, $image_attributes[1], $image_attributes[2], $image_attributes[0], $post_thumbnail_alt ), $post_thumbnail_id );
 					$counter ++;
 					if ( $size == 'large' ) {
 						$image_enclosure = sprintf( $format_enclosure, $image_attributes[0], $mimeType );
