@@ -355,13 +355,17 @@ class Flipboard_RSS_Feed {
 	}
 
 	/**
-	 * Force show 30 items in the feed.
+	 * Force show 30 items in the feed only if value is less than 30.
 	 *
 	 * @author   Jonathan Harris
 	 * @since    1.0.0
 	 */
 	public function option_posts_per_rss( $value ) {
-		return apply_filters( 'flipboard_rss_feed_per_rss', 30 );
+		if ( $value < 30 ) {
+			$value = 30;
+		}
+
+		return apply_filters( 'flipboard_rss_feed_per_rss', $value );
 	}
 
 	/**
