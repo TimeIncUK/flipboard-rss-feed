@@ -73,13 +73,13 @@ class Flipboard_RSS_Feed {
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
+		add_filter( 'option_posts_per_rss', array( $this, 'option_posts_per_rss' ), 15, 1 );
 
 		if ( ! $this->get_is_enabled() ) {
 			return;
 		}
 
 		add_filter( 'option_rss_use_excerpt', array( $this, 'option_rss_use_excerpt' ), 15, 1 );
-		add_filter( 'option_posts_per_rss', array( $this, 'option_posts_per_rss' ), 15, 1 );
 
 		add_action( 'template_redirect', array( $this, 'template_redirect' ) );
 
